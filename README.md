@@ -67,6 +67,16 @@ This repository contains C++ programs developed as part of the **CS 3060: Object
    - **Key Concepts:** Structs, arrays, input validation, and simulation.
    - **File:** [Assignment6.cpp](Assignment6.cpp)
 
+### 7. **Assignment 7: String Search, Array to File, and Corporate Sales Data**
+   - **Date:** 10/22/2024
+   - **Description:**
+     - A set of three programs:
+       1. **String Search in a File**: Prompts the user for a file name and a string, searches for the string in the file, and displays all occurrences along with the number of occurrences.
+       2. **Array to File and File to Array**: Writes an integer array to a binary file, then reads the array back and displays its contents.
+       3. **Corporate Sales Data**: Prompts the user to enter sales data for four divisions over four quarters, stores the data, and writes it to a file. The program then reads and displays the data.
+   - **Key Concepts:** File input/output, string manipulation, binary file handling, and struct-based data management.
+   - **File:** [Assignment7.cpp](Assignment7.cpp)
+
 ## How to Use
 
 1. Clone the repository:
@@ -75,7 +85,7 @@ This repository contains C++ programs developed as part of the **CS 3060: Object
 
 2. Compile any of the assignment files using a C++ compiler:
    ```bash
-   gg++ Assignment1.cpp -o Assignment1
+   g++ Assignment1.cpp -o Assignment1
    ./Assignment1
 
 
