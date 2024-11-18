@@ -291,7 +291,7 @@ void printShip(Ship*& ship) {
     ship.print();
 } // printShip
 
-// Main 
+// Main Function
 int main() {
     char choice;
 
