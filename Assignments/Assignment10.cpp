@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <type_traits>
 
 using namespace std;
 
@@ -98,7 +99,7 @@ class CruiseShip : public Ship {
 
         // Override Print Function
         void print() const {
-            cout << "Ship Name: " << getShipName() << endl;
+            cout << "Cruise Ship Name: " << getShipName() << endl;
             cout << "Max Passengers: " << maxPassengers << endl;
         } // print
 
@@ -133,7 +134,7 @@ class CargoShip : public Ship {
 
         // Override Print Function
         void print() const {
-            cout << "Ship Name: " << getShipName() << endl;
+            cout << "Cargo Ship Name: " << getShipName() << endl;
             cout << "Cargo Capacity: " << cargoCapacity << endl;
         } // print
 }; // CargoShip Class
@@ -146,7 +147,7 @@ class CargoShip : public Ship {
 class BasicShape {
     //Private Data Members
     protected: 
-        double area;
+        double area = 0;
     
     //Public Virtual Functions
     public:
@@ -176,7 +177,7 @@ class Circle : public BasicShape {
     public:
         // Constructor
         Circle(long x, long y, double r) : centerx(x), centery(y), radius(r) {
-            calcArea();
+            area = calcArea();
         } // Constructor
 
         // Accessors
@@ -210,7 +211,7 @@ class Rectangle : public BasicShape {
     public:
         // Constructor
         Rectangle(long w, long l) : width(w), length(l) {
-            calcArea();
+            area = calcArea();
         } // Constructor
 
         // Accessors
@@ -233,16 +234,26 @@ class Rectangle : public BasicShape {
 */
 // Functions
 void displayMenu();
-void getValidInt(int& num);
-void getValiddouble(double& num);
-char getYesOrNo(const string& prompt);
-
-// Ship Program Functions
 void shipProgram();
+void shapeProgram();
+void createCircle(Circle*&);
+void createRectangle(Rectangle*&);
+
+template <class T>
+void getValid(T& num) {
+	// Validate input
+	while (!(cin >> num)) { 
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Invalid input. Enter a valid number: ";
+	} // while
+	cin.ignore(1000, '\n'); // Clear the input buffer
+} // getValid
 
 // Ship Program Function Templates
 template <typename ShipType>
 void createShip(ShipType*& ship) {
+    // Class Variables
     string name, year;
     int maxPassengers, cargoCapacity;
 
@@ -252,16 +263,17 @@ void createShip(ShipType*& ship) {
     cout << "Enter Year Built: ";
     getline(cin, year);
 
-
-    if (constexpr (is_same<ShipType, CruiseShip>::value)) {
+    // Check if the ShipType is a CruiseShip or CargoShip
+    // CPPReference: https://en.cppreference.com/w/cpp/types/is_same
+    if constexpr (is_same<ShipType, CruiseShip>::value) {
         cout << "Enter Max Passengers: ";
-        getValidInt(maxPassengers);
+        getValid(maxPassengers);
         ship = new ShipType(name, year, maxPassengers);
     } // if
 
-    else if (constexpr (is_same<ShipType, CargoShip>::value)) {
+    else if constexpr (is_same<ShipType, CargoShip>::value) {
         cout << "Enter Cargo Capacity: ";
-        getValidInt(cargoCapacity);
+        getValid(cargoCapacity);
         ship = new ShipType(name, year, cargoCapacity);
     } // else if
 
@@ -271,14 +283,17 @@ void createShip(ShipType*& ship) {
 } // createShip
 
 template <typename ShipType>
-void printShip(Ship& ship) {
+void printShip(Ship*& ship) {
     ship.print();
 } // printShip
 
-void shapeProgram();
-void createCircle(Circle*&);
-void createRectangle(Rectangle*&);
-void printShape(BasicShape*);
+// Shape Program Function Templates
+template <typename ShapeType>
+void printShape(BasicShape*& shape) {
+	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+	cout << "Shape Area: " << shape->getArea() << endl;
+	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+} // printShape
 
 
 // Main 
@@ -311,7 +326,7 @@ int main() {
             // Invalid input
             cout << "Invalid input." << endl;
         }
-    } while (choice != '4'); // Continue until the user chooses to exit
+    } while (choice != '3'); // Continue until the user chooses to exit
 
     // Exit the program
     return 0;
@@ -327,53 +342,10 @@ void displayMenu() {
     cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
 } // displayMenu
 
-
-// Function to get a valid integer input
-void getValidInt(int& num) {
-    while (!(cin >> num)) { // Ensure the input is an integer
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Invalid input. Enter an integer: ";
-    }
-    cin.ignore(1000, '\n'); // Clear the input buffer
-} // getValidInt
-
-// Function to get a valid double input
-void getValiddouble(double& num) {
-    while (!(cin >> num)) { // Ensure the input is a double
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Invalid input. Enter a valid number: ";
-    }
-    cin.ignore(1000, '\n'); // Clear the input buffer
-} // getValiddouble
-
-// Gets a 'Y' or 'N' response with validation
-char getYesOrNo(const string& prompt)
-{
-	char choice;
-
-	cout << prompt;
-	cin >> choice;
-	choice = toupper(choice);
-	cin.ignore(1000, '\n');
-
-	while (choice != 'Y' && choice != 'N')
-	{
-		cout << "Invalid input. Please enter Y or N: ";
-		cin >> choice;
-		choice = toupper(choice);
-		cin.ignore(1000, '\n');
-	}
-	return choice;
-} // getYesOrNo
-
 // Ship Program
+// reinterpret_cast<Derived*&>(base) logic: https://en.cppreference.com/w/cpp/language/reinterpret_cast
 void shipProgram() {
-    Ship* ship = nullptr;
-    CruiseShip* cruiseShip = nullptr;
-    CargoShip* cargoShip = nullptr;
-    Ship* shipArray;
+    Ship** shipArray = nullptr;
     char choice;
     int numShips;
 
@@ -382,111 +354,164 @@ void shipProgram() {
     cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
 
     cout << "How many ships would you like to create?" << endl;
-    getValidInt(numShips);
+    getValid(numShips);
     cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
 
-    shipArray = new Ship[numShips];
+    shipArray = new Ship*[numShips];
 
     for (int i = 0; i < numShips; i++) {  
 
         cout << "What type of ship would you like to create?" << endl;
-        cout << "Enter '1' for Ship, '2' for CruiseShip, or '3' for CargoShip,: ";
+        cout << "Enter '1' for Ship, '2' for CruiseShip, or '3' for CargoShip: ";
         cin >> choice;
         cin.ignore(1000, '\n');  // Clear input buffer
-
+        
         switch (choice) {
         case '1':
             // Create Ship
-            createShip(ship);
-            shipArray[i] = *ship;
+            cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Creating Ship..." << endl;
+
+            createShip(shipArray[i]);
+
+			cout << shipArray[i]->getShipName() << " created!" << endl;
+            cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
             break;
 
         case '2':
             // Create CruiseShip
-            createCruiseShip(cruiseShip);
-            shipArray[i] = *cruiseShip;
-            cruiseShip->print();
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Creating CruiseShip..." << endl;
+
+			createShip(reinterpret_cast<CruiseShip*&>(shipArray[i]));
+
+            cout << shipArray[i]->getShipName() << " created!" << endl;
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
             break;
 
         case '3':
             // Create CargoShip
-            createCargoShip(cargoShip);
-            shipArray[i] = *cargoShip;
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Creating CargoShip..." << endl;
+
+			createShip(reinterpret_cast<CargoShip*&>(shipArray[i]));
+
+            cout << shipArray[i]->getShipName() << " created!" << endl;
+            cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+
             break;
 
         default:
             // Invalid input
             cout << "Invalid input." << endl;
-        }
+			i--; // Decrement i to re-enter the ship type
+		} // switch
 
     } // for
 
-    cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+	// Print Ships 
     cout << "Printing Ships:" << endl;
     cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
-    for (int i = 0; i < numShips; i++) {
-        shipArray[i].print();
-    } // for
+    
+	// Print Ships
+	for (int i = 0; i < numShips; i++) {
+		shipArray[i]->print();
+		cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+	} // for
 
     // Delete dynamic memory
     for (int i = 0; i < numShips; i++) {
-        delete &shipArray[i];
+        delete shipArray[i];
+		shipArray[i] = nullptr;
     } // for
 
-    delete[] shipArray;
+	delete[] shipArray;
+	shipArray = nullptr;
 
-    ship = nullptr;
-    cruiseShip = nullptr;
-    cargoShip = nullptr;
-
-    cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
     cout << "Exiting Ship Program." << endl;
 
 } // shipProgram
 
-void createShip(Ship*& ship) {
-    string name, year;
+// Shape Program
+void shapeProgram() {
+	Rectangle* rectangle = nullptr;
+	Circle* circle = nullptr;
+	char choice;
+    double area = 0;
 
-    cout << "Enter Ship Name: ";
-    getline(cin, name);
+	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+	cout << "Welcome to the Shape demonstration!" << endl;
+	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
 
-    cout << "Enter Year Built: ";
-    getline(cin, year);
+	do {
+		cout << "What type of shape would you like to create?" << endl;
+		cout << "Enter '1' for Circle, '2' for Rectangle, or '3' to exit: ";
 
-    ship = new Ship(name, year);
-} // createShip
+		cin >> choice;
+		cin.ignore(1000, '\n');  // Clear input buffer
 
-void createCruiseShip(CruiseShip*& cruiseShip) {
-    string name, year;
-    int maxPassengers;
+		switch (choice) {
+		case '1':
+			// Create Circle
+            cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Creating Circle..." << endl;   
+			createCircle(circle);
+			cout << "The area of the circle is: " << circle->getArea() << endl;
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
 
-    cout << "Enter Cruise Ship Name: ";
-    getline(cin, name);
+			break;
 
-    cout << "Enter Year Built: ";
-    getline(cin, year);
+		case '2':
+			// Create Rectangle
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Creating Rectangle..." << endl;
+			createRectangle(rectangle);
+            cout << "The area of the rectangle is: " << rectangle->getArea() << endl;
+            cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			break;
 
-    cout << "Enter Max Passengers: ";
-    getValidInt(maxPassengers);
+		case '3':
+			// Exit the program
+			cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
+			cout << "Exiting Shape Program." << endl;
+			break;
 
-    cruiseShip = new CruiseShip(name, year, maxPassengers);
-} // createCruiseShip
+		default:
+			// Invalid input
+			cout << "Invalid input." << endl;
+		}
 
-void createCargoShip(CargoShip*& cargoShip) {
-    string name, year;
-    int cargoCapacity;
-
-    cout << "Enter Cargo Ship Name: ";
-    getline(cin, name);
-
-    cout << "Enter Year Built: ";
-    getline(cin, year);
-
-    cout << "Enter Cargo Capacity: ";
-    getValidInt(cargoCapacity);
-
-    cargoShip = new CargoShip(name, year, cargoCapacity);
-} // createCargoShip
+	} while (choice != '3'); // Continue until the user chooses to exit
 
 
+} // shapeProgram   
 
+// Create Circle
+void createCircle(Circle*& circle) {
+	long centerX, centerY;
+	double radius;
+
+	cout << "Enter the x-coordinate of the center: ";
+	getValid(centerX);
+
+	cout << "Enter the y-coordinate of the center: ";
+	getValid(centerY);
+
+	cout << "Enter the radius: ";
+	getValid(radius);
+
+	circle = new Circle(centerX, centerY, radius);
+} // createCircle
+
+// Create Rectangle
+void createRectangle(Rectangle*& rectangle) {
+	long width, length;
+
+	cout << "Enter the width: ";
+	getValid(width);
+
+	cout << "Enter the length: ";
+	getValid(length);
+
+	rectangle = new Rectangle(width, length);
+} // createRectangle
