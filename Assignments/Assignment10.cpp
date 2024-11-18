@@ -234,13 +234,14 @@ class Rectangle : public BasicShape {
 /*
 *       Function Prototypes
 */
-// Functions
+// Functions prototypes
 void displayMenu();
 void shipProgram();
 void shapeProgram();
 void createCircle(Circle*&);
 void createRectangle(Rectangle*&);
 
+// Function template to get valid input for any data type
 template <class T>
 void getValid(T& num) {
 	// Validate input
@@ -252,7 +253,7 @@ void getValid(T& num) {
 	cin.ignore(1000, '\n'); // Clear the input buffer
 } // getValid
 
-// Ship Program Function Templates
+// Create Ship Template that takes any ShipType and creates a new Ship
 template <typename ShipType>
 void createShip(ShipType*& ship) {
     // Class Variables
@@ -284,19 +285,11 @@ void createShip(ShipType*& ship) {
     } // else
 } // createShip
 
+// Print Ship Template that takes any ShipType and calls its print function
 template <typename ShipType>
 void printShip(Ship*& ship) {
     ship.print();
 } // printShip
-
-// Shape Program Function Templates
-template <typename ShapeType>
-void printShape(BasicShape*& shape) {
-	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
-	cout << "Shape Area: " << shape->getArea() << endl;
-	cout << setfill('-') << setw(MENU_WIDTH) << "-" << endl;
-} // printShape
-
 
 // Main 
 int main() {
