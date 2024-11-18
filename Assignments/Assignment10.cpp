@@ -5,7 +5,7 @@
  * Assignment 10
  *
  * Description:
- * C++ program with three different components:
+ * C++ program with two different components:
  *
  * 1. Ship, CruiseShip, and CargoShip Classes:
  *    - Ship Class: Base class with string shipName, string yearBuilt
