@@ -1,19 +1,21 @@
 /*
  * Darion Badillo
- * 11/11/2024
+ * 11/18/2024
  * CS 3060
- * Assignment 8
+ * Assignment 10
  *
  * Description:
  * C++ program with three different components:
  *
  * 1. Ship, CruiseShip, and CargoShip Classes:
- *    - 
- *    - 
+ *    - Ship Class: Base class with string shipName, string yearBuilt
+ *    - CruiseShip Class: Derived from Ship with int maxPassengers
+ *    - CargoShip Class: Derived from Ship with int cargoCapacity
  *
  * 2. Pure Abstract Base Class Project:
- *    - 
-
+ *    - BasicShape: Abstract Base Class with double area
+ *    - Circle: Derived from BasicShape with long centerx, long centery, double radius
+ *    - Rectangle: Derived from BasicShape with long width, long length
 */
 
 #include <iostream>
