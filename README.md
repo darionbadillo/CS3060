@@ -77,15 +77,54 @@ This repository contains C++ programs developed as part of the **CS 3060: Object
    - **Key Concepts:** File input/output, string manipulation, binary file handling, and struct-based data management.
    - **File:** [Assignment7.cpp](Assignments/Assignment7.cpp)
 
+### 8. **Assignment 8: Car, Personal Information, and Number Array Classes**
+   - **Date:** 10/29/2024
+   - **Description:** 
+     - A set of three object-oriented programs:
+       1. **Car Class**: Demonstrates acceleration and braking for a car.
+       2. **Personal Information Class**: Holds and displays user-defined personal data.
+       3. **Number Array Class**: Manages a dynamic array, calculates high, low, and average.
+   - **Key Concepts:** Object-oriented design, classes, and dynamic memory allocation.
+   - **File:** [Assignment8.cpp](Assignments/Assignment8.cpp)
+
+### 9. **Assignment 9: Employee and Graded Activities**
+   - **Date:** 11/11/2024
+   - **Description:** 
+     - A set of programs showcasing inheritance and polymorphism:
+       1. **Employee and ProductionWorker Classes**: Models employees and their roles.
+       2. **PersonData and CustomerData Classes**: Captures and displays customer and personal data.
+       3. **Course Grades**: Manages grades for various types of graded activities.
+   - **Key Concepts:** Inheritance, polymorphism, and object composition.
+   - **File:** [Assignment9.cpp](Assignments/Assignment9.cpp)
+
+### 10. **Assignment 10: Ship and Shape Hierarchies**
+   - **Date:** 11/18/2024
+   - **Description:** 
+     - Programs using inheritance and abstract classes:
+       1. **Ship, CruiseShip, and CargoShip Classes**: Models different types of ships.
+       2. **BasicShape Abstract Class**: Demonstrates shape hierarchies with Circle and Rectangle classes.
+   - **Key Concepts:** Inheritance, virtual functions, and pure abstract classes.
+   - **File:** [Assignment10.cpp](Assignments/Assignment10.cpp)
+
+### 11. **Assignment 11: Minimum/Maximum Templates and Test Scores**
+   - **Date:** 11/26/2024
+   - **Description:** 
+     - A program demonstrating templates and exception handling:
+       1. **Minimum/Maximum Templates**: Generic functions for comparisons.
+       2. **TestScores Class**: Calculates averages with validation and exception handling.
+   - **Key Concepts:** Function templates, exception handling, and dynamic memory management.
+   - **File:** [Assignment11.cpp](Assignments/Assignment11.cpp)
+
 ## How to Use
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/cpp-assignments.git
-
+   git clone https://github.com/darionbadillo/CS3060.git
+   ```
 2. Compile any of the assignment files using a C++ compiler:
    ```bash
    g++ Assignment1.cpp -o Assignment1
    ./Assignment1
+   ```
 
-
+--- 
